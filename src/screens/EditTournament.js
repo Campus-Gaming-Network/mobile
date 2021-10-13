@@ -2,10 +2,10 @@ import React from "react";
 import { Button, Text } from "react-native";
 import { Center } from "native-base";
 
-export default function ForgotPassword({ navigation }) {
+export default function EditTournament({ navigation }) {
   return (
     <Center flex={1}>
-      <Text>ForgotPassword</Text>
+      <Text>EditTournament</Text>
       <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
       <Button title="Go back" onPress={() => navigation.goBack()} />
       <Button

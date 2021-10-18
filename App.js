@@ -59,8 +59,8 @@ function HomeScreen({ navigation }) {
     <Center flex={1}>
       <Text>Home Screen</Text>
       <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate("User")}
+        title="Go to Welcome"
+        onPress={() => navigation.navigate("Welcome")}
       />
     </Center>
   );

@@ -3,6 +3,15 @@ import { Button, Text } from "react-native";
 import { NativeBaseProvider, Center } from "native-base";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+
+import * as Sentry from "sentry-expo";
+
+Sentry.init({
+  dsn: Constants.manifest.extra.NEXT_PUBLIC_SENTRY_DSN,
+  enableInExpoDevelopment: true,
+  debug: true,
+});
 
 import Welcome from "./src/screens/Welcome";
 import SignUp from "./src/screens/SignUp";

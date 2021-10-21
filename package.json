@@ -22,7 +22,12 @@
     "react-native-svg": "12.1.1",
     "react-native-web": "~0.13.12",
     "styled-components": "^5.3.1",
-    "styled-system": "^5.1.5"
+    "styled-system": "^5.1.5",
+    "sentry-expo": "^4.0.0",
+    "expo-application": "~3.2.0",
+    "expo-constants": "~11.0.1",
+    "expo-device": "~3.3.0",
+    "expo-updates": "~0.8.2"
   },
   "husky": {
     "hooks": {

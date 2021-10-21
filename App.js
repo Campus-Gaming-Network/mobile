@@ -9,6 +9,8 @@ import * as Sentry from "sentry-expo";
 
 Sentry.init({
   dsn: Constants.manifest.extra.NEXT_PUBLIC_SENTRY_DSN,
+  environment:
+    process.env.MY_ENVIRONMENT === "production" ? "production" : "development",
   enableInExpoDevelopment: true,
   debug: true,
 });

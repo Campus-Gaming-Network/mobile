@@ -16,22 +16,22 @@ Sentry.init({
 });
 
 import Welcome from "./src/screens/Welcome";
-import SignUp from "./src/screens/SignUp";
+// import SignUp from "./src/screens/SignUp";
 import LogIn from "./src/screens/LogIn";
 import ForgotPassword from "./src/screens/ForgotPassword";
 import ResetPassword from "./src/screens/ResetPassword";
-import User from "./src/screens/User";
-import Team from "./src/screens/Team";
-import School from "./src/screens/School";
-import Event from "./src/screens/Event";
-import Tournament from "./src/screens/Tournament";
-import EditUser from "./src/screens/EditUser";
-import EditSchool from "./src/screens/EditSchool";
-import EditEvent from "./src/screens/EditEvent";
-import EditTournament from "./src/screens/EditTournament";
-import CreateEvent from "./src/screens/CreateEvent";
-import CreateTeam from "./src/screens/CreateTeam";
-import CreateTournament from "./src/screens/CreateTournament";
+// import User from "./src/screens/User";
+// import Team from "./src/screens/Team";
+// import School from "./src/screens/School";
+// import Event from "./src/screens/Event";
+// import Tournament from "./src/screens/Tournament";
+// import EditUser from "./src/screens/EditUser";
+// import EditSchool from "./src/screens/EditSchool";
+// import EditEvent from "./src/screens/EditEvent";
+// import EditTournament from "./src/screens/EditTournament";
+// import CreateEvent from "./src/screens/CreateEvent";
+// import CreateTeam from "./src/screens/CreateTeam";
+// import CreateTournament from "./src/screens/CreateTournament";
 
 const screens = [
   {
@@ -41,28 +41,23 @@ const screens = [
       title: "Overview",
     },
   },
-
   { name: "Welcome", component: Welcome },
-
-  { name: "SignUp", component: SignUp },
+  // { name: "SignUp", component: SignUp },
   { name: "LogIn", component: LogIn },
   { name: "ForgotPassword", component: ForgotPassword },
   { name: "ResetPassword", component: ResetPassword },
-
-  { name: "User", component: User },
-  { name: "Team", component: Team },
-  { name: "School", component: School },
-  { name: "Event", component: Event },
-  { name: "Tournament", component: Tournament },
-
-  { name: "EditUser", component: EditUser },
-  { name: "EditSchool", component: EditSchool },
-  { name: "EditEvent", component: EditEvent },
-  { name: "EditTournament", component: EditTournament },
-
-  { name: "CreateEvent", component: CreateEvent },
-  { name: "CreateTeam", component: CreateTeam },
-  { name: "CreateTournament", component: CreateTournament },
+  // { name: "User", component: User },
+  // { name: "Team", component: Team },
+  // { name: "School", component: School },
+  // { name: "Event", component: Event },
+  // { name: "Tournament", component: Tournament },
+  // { name: "EditUser", component: EditUser },
+  // { name: "EditSchool", component: EditSchool },
+  // { name: "EditEvent", component: EditEvent },
+  // { name: "EditTournament", component: EditTournament },
+  // { name: "CreateEvent", component: CreateEvent },
+  // { name: "CreateTeam", component: CreateTeam },
+  // { name: "CreateTournament", component: CreateTournament },
 ];
 
 function HomeScreen({ navigation }) {

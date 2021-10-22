@@ -1,8 +1,24 @@
 import React from "react";
-import { Center, Box, Heading, Button, Image, VStack } from "native-base";
+import { Text, Box, Heading, Button, Image, VStack } from "native-base";
 import logo from "../../assets/logo.png";
+import { getStorageItem } from "../utilities/storage";
+import { STORAGE_KEYS } from "../constants/storage";
 
 export default function Welcome({ navigation }) {
+  const [user, setUser] = React.useState(null);
+
+  const getUser = async () => {
+    const savedUser = await getStorageItem(STORAGE_KEYS.AUTH);
+
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  };
+
+  React.useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <Box safeArea flex={1} p="2" py="8" w="90%" mx="auto">
       <VStack alignItems="center" mt={100} space={6}>
@@ -14,6 +30,7 @@ export default function Welcome({ navigation }) {
         <Heading size="lg" fontWeight="bold">
           Campus Gaming Network
         </Heading>
+        <Text>({user ? user.email : null})</Text>
       </VStack>
       <Button
         mt={6}
@@ -22,15 +39,6 @@ export default function Welcome({ navigation }) {
         _text={{ fontWeight: "bold" }}
       >
         Log In
-      </Button>
-      <Button
-        mt={4}
-        onPress={() => navigation.navigate("SignUp")}
-        variant="outline"
-        colorScheme="orange"
-        _text={{ fontWeight: "bold" }}
-      >
-        Sign Up
       </Button>
     </Box>
   );

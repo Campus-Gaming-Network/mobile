@@ -13,23 +13,27 @@ import {
   useToast,
 } from "native-base";
 import { auth } from "../firebase";
+import { saveStorageItem } from "../utilities/storage";
+import { STORAGE_KEYS } from "../constants/storage";
 
 export default function LogIn({ navigation }) {
   const toast = useToast();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const handleSubmit = async () => {
-    let response;
+    setIsSubmitting(true);
 
     try {
-      response = await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       toast.show({
         title: "Something went wrong",
         status: "error",
         description: "Please create a support ticket from the support page",
       });
+      setIsSubmitting(false);
       return;
     }
 
@@ -38,6 +42,17 @@ export default function LogIn({ navigation }) {
       status: "success",
       description: "Welcome back.",
     });
+
+    await saveStorageItem(
+      STORAGE_KEYS.AUTH,
+      JSON.stringify({
+        uid: auth.currentUser.uid,
+        email: auth.currentUser.email,
+        emailVerified: auth.currentUser.emailVerified,
+        createdAt: auth.currentUser.createdAt,
+        lastLoginAt: auth.currentUser.lastLoginAt,
+      })
+    );
   };
 
   return (
@@ -72,41 +87,16 @@ export default function LogIn({ navigation }) {
             Password
           </FormControl.Label>
           <Input type="password" onChangeText={(value) => setPassword(value)} />
-          <Link
-            _text={{ fontSize: "xs", color: "indigo.500" }}
-            alignSelf="flex-end"
-            mt="1"
-            variant="link"
-            onPress={() => navigation.navigate("ForgotPassword")}
-          >
-            Forget Password?
-          </Link>
         </FormControl>
         <Button
+          isDisabled={isSubmitting}
           onPress={handleSubmit}
           mt="2"
           colorScheme="orange"
           _text={{ color: "white", fontWeight: "bold" }}
         >
-          Sign in
+          {isSubmitting ? "Signing in..." : "Sign in"}
         </Button>
-        <HStack mt="6" justifyContent="center">
-          <Text fontSize="sm" color="muted.700" fontWeight={400}>
-            I'm a new user.{" "}
-          </Text>
-          <Button
-            _text={{
-              color: "indigo.500",
-              fontSize: "sm",
-            }}
-            p={0}
-            m={0}
-            variant="link"
-            onPress={() => navigation.navigate("SignUp")}
-          >
-            Sign Up
-          </Button>
-        </HStack>
       </VStack>
     </Box>
   );

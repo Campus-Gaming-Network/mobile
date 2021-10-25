@@ -8,7 +8,7 @@ import Constants from "expo-constants";
 import * as Sentry from "sentry-expo";
 
 Sentry.init({
-  dsn: Constants.manifest.extra.NEXT_PUBLIC_SENTRY_DSN,
+  dsn: Constants.manifest.extra.sentryDsn,
   environment:
     process.env.MY_ENVIRONMENT === "production" ? "production" : "development",
   enableInExpoDevelopment: true,

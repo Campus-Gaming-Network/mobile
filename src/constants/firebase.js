@@ -4,14 +4,13 @@
 import Constants from "expo-constants";
 
 export const FIREBASE_CONFIG = {
-  apiKey: Constants.manifest.extra.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: Constants.manifest.extra.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  databaseURL: Constants.manifest.extra.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-  projectId: Constants.manifest.extra.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: Constants.manifest.extra.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId:
-    Constants.manifest.extra.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: Constants.manifest.extra.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: Constants.manifest.extra.apiKey,
+  authDomain: Constants.manifest.extra.authDomain,
+  databaseURL: Constants.manifest.extra.databaseURL,
+  projectId: Constants.manifest.extra.projectId,
+  storageBucket: Constants.manifest.extra.storageBucket,
+  messagingSenderId: Constants.manifest.extra.messagingSenderId,
+  appId: Constants.manifest.extra.appId,
 };
 export const COLLECTIONS = {
   SCHOOLS: "schools",

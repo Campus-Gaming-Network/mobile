@@ -1,5 +1,4 @@
 import React from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import {
   Box,
   Text,
@@ -26,7 +25,6 @@ export default function LogIn({ navigation }) {
     setIsSubmitting(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       toast.show({
         title: "Something went wrong",
@@ -43,16 +41,16 @@ export default function LogIn({ navigation }) {
       description: "Welcome back.",
     });
 
-    await saveStorageItem(
-      STORAGE_KEYS.AUTH,
-      JSON.stringify({
-        uid: auth.currentUser.uid,
-        email: auth.currentUser.email,
-        emailVerified: auth.currentUser.emailVerified,
-        createdAt: auth.currentUser.createdAt,
-        lastLoginAt: auth.currentUser.lastLoginAt,
-      })
-    );
+    // await saveStorageItem(
+    //   STORAGE_KEYS.AUTH,
+    //   JSON.stringify({
+    //     uid: auth.currentUser.uid,
+    //     email: auth.currentUser.email,
+    //     emailVerified: auth.currentUser.emailVerified,
+    //     createdAt: auth.currentUser.createdAt,
+    //     lastLoginAt: auth.currentUser.lastLoginAt,
+    //   })
+    // );
   };
 
   return (

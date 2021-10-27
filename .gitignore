@@ -14,7 +14,7 @@ web-build/
 
 app.config.js
 GoogleService-Info*.plist
-google-services.json
+google-services*.json
 .env.local
 .env.development.local
 .env.test.local

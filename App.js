@@ -18,6 +18,7 @@ Sentry.init({
 import Welcome from "./src/screens/Welcome";
 // import SignUp from "./src/screens/SignUp";
 import LogIn from "./src/screens/LogIn";
+import Landing from "./src/screens/Landing";
 import ForgotPassword from "./src/screens/ForgotPassword";
 import ResetPassword from "./src/screens/ResetPassword";
 // import User from "./src/screens/User";
@@ -44,6 +45,13 @@ const screens = [
   { name: "Welcome", component: Welcome },
   // { name: "SignUp", component: SignUp },
   { name: "LogIn", component: LogIn },
+  {
+    name: "Landing",
+    component: Landing,
+    options: {
+      title: "Events You're Attending",
+    },
+  },
   { name: "ForgotPassword", component: ForgotPassword },
   { name: "ResetPassword", component: ResetPassword },
   // { name: "User", component: User },

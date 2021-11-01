@@ -24,7 +24,7 @@ import ResetPassword from "./src/screens/ResetPassword";
 // import User from "./src/screens/User";
 // import Team from "./src/screens/Team";
 // import School from "./src/screens/School";
-// import Event from "./src/screens/Event";
+import Event from "./src/screens/Event";
 // import Tournament from "./src/screens/Tournament";
 // import EditUser from "./src/screens/EditUser";
 // import EditSchool from "./src/screens/EditSchool";
@@ -57,7 +57,7 @@ const screens = [
   // { name: "User", component: User },
   // { name: "Team", component: Team },
   // { name: "School", component: School },
-  // { name: "Event", component: Event },
+  { name: "Event", component: Event },
   // { name: "Tournament", component: Tournament },
   // { name: "EditUser", component: EditUser },
   // { name: "EditSchool", component: EditSchool },

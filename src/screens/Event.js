@@ -61,36 +61,41 @@ export default function Event({ navigation }) {
             {event.date}
           </Text> */}
           <Divider my={4} />
-          <VStack>
-            <Flex direction="row">
-              <Box pr={2} pt={1}>
-                <FontAwesome name="calendar" size={16} />
-              </Box>
-              <VStack>
-                <Text bold fontSize="md" lineHeight="sm">
-                  Friday, August 20, 2021
-                </Text>
-                <Text bold fontSize="md">
-                  6:00pm to 8:00pm MDT
-                </Text>
-              </VStack>
-            </Flex>
-            <Flex pt={4} direction="row">
-              <Box pr={2}>
-                <FontAwesome name="map-marker" size={18} />
-              </Box>
-              <VStack>
-                <Text bold fontSize="md" lineHeight="sm">
-                  42 Wallaby Way, Sydney, Australia
-                </Text>
-              </VStack>
-            </Flex>
+          <VStack space={8}>
+            <VStack>
+              <Flex direction="row">
+                <Box pr={2} pt={1}>
+                  <FontAwesome name="calendar" size={16} />
+                </Box>
+                <VStack>
+                  <Text bold fontSize="md" lineHeight="sm">
+                    Friday, August 20, 2021
+                  </Text>
+                  <Text bold fontSize="md">
+                    6:00pm to 8:00pm MDT
+                  </Text>
+                </VStack>
+              </Flex>
+              <Flex pt={4} direction="row">
+                <Box pr={2}>
+                  <FontAwesome name="map-marker" size={18} />
+                </Box>
+                <VStack>
+                  <Text bold fontSize="md" lineHeight="sm">
+                    42 Wallaby Way, Sydney, Australia
+                  </Text>
+                </VStack>
+              </Flex>
+            </VStack>
+            <Box>
+              <Heading pb={2}>Description</Heading>
+              <Text>{event.description}</Text>
+            </Box>
+            <Box>
+              <Heading pb={2}>Attendees (0)</Heading>
+              <Text>No one going :(</Text>
+            </Box>
           </VStack>
-          <Divider my={4} />
-          <Box>
-            <Heading pb={2}>Description</Heading>
-            <Text>{event.description}</Text>
-          </Box>
         </VStack>
       </Box>
     </SafeAreaView>

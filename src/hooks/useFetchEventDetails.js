@@ -1,16 +1,7 @@
 // Libraries
 import React from "react";
-// import isEmpty from "lodash.isempty";
-// import { getDoc, doc } from "firebase/firestore";
-
-// Other
-// import { db } from "src/firebase";
-
-// Utilities
-// import { mapEvent } from "src/utilities/event";
-
-// Constants
-// import { COLLECTIONS } from "src/constants/firebase";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const useFetchEventDetails = (id) => {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -22,33 +13,20 @@ const useFetchEventDetails = (id) => {
       setIsLoading(true);
       setEvent(null);
       setError(null);
-      console.log("fetchEventDetails");
 
-      //   if (state.events[id] && !isEmpty(state.events[id])) {
-      // if (process.env.NODE_ENV !== "production") {
-      //   console.log(`[CACHE] fetchEventDetails...${id}`);
-      // }
+      try {
+        const _doc = await getDoc(doc(db, "events", id));
 
-      // setEvent(state.events[id]);
-      // setIsLoading(false);
-      //   } else {
-      // if (process.env.NODE_ENV !== "production") {
-      //   console.log(`[API] fetchEventDetails...${id}`);
-      // }
+        if (_doc.exists) {
+          setEvent(_doc.data());
+        }
 
-      // getDoc(doc(db, COLLECTIONS.EVENTS, id))
-      //   .then((doc) => {
-      //     if (doc.exists) {
-      //       setEvent(mapEvent(doc.data(), doc));
-      //     }
-      //     setIsLoading(false);
-      //   })
-      //   .catch((error) => {
-      //     console.error({ error });
-      //     setError(error);
-      //     setIsLoading(false);
-      //   });
-      //   }
+        setIsLoading(false);
+      } catch (error) {
+        console.error({ error });
+        setError(error);
+        setIsLoading(false);
+      }
     };
 
     if (id) {

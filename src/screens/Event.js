@@ -13,6 +13,7 @@ import {
 } from "native-base";
 import { FontAwesome } from "@expo/vector-icons";
 import background from "../../assets/background.png";
+import useFetchEventDetails from "../hooks/useFetchEventDetails";
 
 export default function Event({ navigation }) {
   const event = {
@@ -30,6 +31,25 @@ export default function Event({ navigation }) {
         ? "Short Description"
         : "We’ll spend 20 minutes on each city, throwing ideas to each other about what to look at, etc",
   };
+
+  const [_event, isLoading, error] = useFetchEventDetails(
+    "9uYkG5hC1qFlvJHoRyzM"
+  );
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>Error</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView>
       <Box>
@@ -47,12 +67,12 @@ export default function Event({ navigation }) {
             </Text>
           ) : null}
           <Heading fontSize="3xl" bold lineHeight="sm">
-            {event.title}
+            {_event.name}
           </Heading>
           <Heading fontSize="md" bold pt={1}>
-            {event.school}
+            {_event.school.name}
           </Heading>
-          {event.isOnlineEvent ? (
+          {_event.isOnlineEvent ? (
             <Badge mt={2} fontSize="xs" color="gray.500" mr="auto">
               Online Event
             </Badge>
@@ -89,7 +109,7 @@ export default function Event({ navigation }) {
             </VStack>
             <Box>
               <Heading pb={2}>Description</Heading>
-              <Text>{event.description}</Text>
+              <Text>{_event.description}</Text>
             </Box>
             <Box>
               <Heading pb={2}>Attendees (0)</Heading>

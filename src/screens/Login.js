@@ -11,31 +11,32 @@ import {
   HStack,
   useToast,
 } from "native-base";
-// import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 import { saveStorageItem } from "../utilities/storage";
 import { STORAGE_KEYS } from "../constants/storage";
 
 export default function LogIn({ navigation }) {
   const toast = useToast();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = React.useState("sansonebrandon@gmail.com");
+  const [password, setPassword] = React.useState("lol123!");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const handleSubmit = async () => {
-    // setIsSubmitting(true);
+    setIsSubmitting(true);
 
-    // try {
-    // await auth().signInWithEmailAndPassword("sansonebrandon@gmail.com", "lol123!");
-    // } catch (error) {
-    //   console.log(error)
-    //   toast.show({
-    //     title: "Something went wrong",
-    //     status: "error",
-    //     description: "Please create a support ticket from the support page",
-    //   });
-    //   setIsSubmitting(false);
-    //   return;
-    // }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.log(error);
+      toast.show({
+        title: "Something went wrong",
+        status: "error",
+        description: "Please create a support ticket from the support page",
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
     toast.show({
       title: "Login successful",
@@ -44,6 +45,7 @@ export default function LogIn({ navigation }) {
     });
 
     navigation.navigate("Landing");
+    setIsSubmitting(false);
 
     // await saveStorageItem(
     //   STORAGE_KEYS.AUTH,

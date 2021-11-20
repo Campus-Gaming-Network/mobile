@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@campus-gaming-network/tools": "^2.0.94",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.4",
     "dotenv": "^10.0.0",
@@ -19,6 +20,7 @@
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.8.2",
     "firebase": "^9.0.2",
+    "luxon": "^2.1.1",
     "native-base": "^3.2.1-rc.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -29,7 +31,8 @@
     "react-native-web": "~0.13.12",
     "sentry-expo": "^4.0.0",
     "styled-components": "^5.3.1",
-    "styled-system": "^5.1.5"
+    "styled-system": "^5.1.5",
+    "text-encoding-polyfill": "^0.6.7"
   },
   "husky": {
     "hooks": {

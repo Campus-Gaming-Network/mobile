@@ -7,6 +7,8 @@ import Constants from "expo-constants";
 
 import * as Sentry from "sentry-expo";
 
+import "text-encoding-polyfill";
+
 Sentry.init({
   dsn: Constants.manifest.extra.sentryDsn,
   environment: process.env.ENV !== "development" ? "production" : "development",

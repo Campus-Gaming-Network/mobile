@@ -1,43 +1,38 @@
 import React from "react";
-import { Heading, HStack } from "native-base";
-import { SafeAreaView, FlatList } from "react-native";
+import { SafeAreaView } from "react-native";
 import {
+  Heading,
   Divider,
   VStack,
   Image,
   Text,
   Box,
-  Pressable,
   Flex,
   Badge,
+  Avatar,
+  HStack,
 } from "native-base";
 import { FontAwesome } from "@expo/vector-icons";
 import background from "../../assets/background.png";
 import useFetchEventDetails from "../hooks/useFetchEventDetails";
+import useFetchEventUsers from "../hooks/useFetchEventUsers";
+import { DateTime } from "luxon";
+import { createGravatarRequestUrl } from "@campus-gaming-network/tools";
 
-export default function Event({ navigation }) {
-  const event = {
-    title:
-      Math.floor(Math.random() * 10) % 2 === 0
-        ? "Short Title"
-        : "Long Title Long Title Long Title Long Title Long Title Long Title",
-    date: new Date().toLocaleString(),
-    school: "University of Chicago",
-    going: Math.floor(Math.random() * 101),
-    isOnlineEvent: Math.floor(Math.random() * 10) % 3 === 0,
-    hasStarted: Math.floor(Math.random() * 10) % 6 === 0,
-    description:
-      Math.floor(Math.random() * 10) % 2 === 0
-        ? "Short Description"
-        : "We’ll spend 20 minutes on each city, throwing ideas to each other about what to look at, etc",
-  };
-
-  const [_event, isLoading, error] = useFetchEventDetails(
+export default function Event() {
+  const [event, isLoading, error] = useFetchEventDetails(
     "9uYkG5hC1qFlvJHoRyzM"
   );
+  const [users] = useFetchEventUsers("9uYkG5hC1qFlvJHoRyzM");
 
   if (isLoading) {
-    return null;
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>Loading...</Text>
+        </Box>
+      </SafeAreaView>
+    );
   }
 
   if (error) {
@@ -50,36 +45,57 @@ export default function Event({ navigation }) {
     );
   }
 
+  if (!event) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>No data</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView>
       <Box>
         <Image source={background} w="100%" h={125} />
         <VStack p={4}>
           {event.hasStarted ? (
-            <Text
-              color="green.600"
-              textTransform="uppercase"
-              bold
-              fontSize="sm"
-              isTruncated
-            >
-              Happening now
-            </Text>
+            <Flex bg="green.100" mr="auto" px={4} rounded="lg">
+              <Text
+                color="green.600"
+                textTransform="uppercase"
+                bold
+                fontSize="sm"
+                isTruncated
+              >
+                Happening now
+              </Text>
+            </Flex>
+          ) : event.hasEnded ? (
+            <Flex bg="red.100" mr="auto" px={2} rounded="lg">
+              <Text
+                color="red.600"
+                textTransform="uppercase"
+                bold
+                fontSize="sm"
+                isTruncated
+              >
+                Event ended
+              </Text>
+            </Flex>
           ) : null}
           <Heading fontSize="3xl" bold lineHeight="sm">
-            {_event.name}
+            {event.name}
           </Heading>
           <Heading fontSize="md" bold pt={1}>
-            {_event.school.name}
+            {event.school.name}
           </Heading>
-          {_event.isOnlineEvent ? (
+          {event.isOnlineEvent ? (
             <Badge mt={2} fontSize="xs" color="gray.500" mr="auto">
               Online Event
             </Badge>
           ) : null}
-          {/* <Text color="blue.600" fontSize="sm" bold isTruncated>
-            {event.date}
-          </Text> */}
           <Divider my={4} />
           <VStack space={8}>
             <VStack>
@@ -89,31 +105,71 @@ export default function Event({ navigation }) {
                 </Box>
                 <VStack>
                   <Text bold fontSize="md" lineHeight="sm">
-                    Friday, August 20, 2021
+                    {DateTime.fromSeconds(
+                      event.startDateTime.seconds
+                    ).toLocaleString({
+                      ...DateTime.DATETIME_FULL,
+                      ...{ month: "long", day: "numeric" },
+                    })}
                   </Text>
                   <Text bold fontSize="md">
-                    6:00pm to 8:00pm MDT
+                    {DateTime.fromSeconds(
+                      event.endDateTime.seconds
+                    ).toLocaleString({
+                      ...DateTime.DATETIME_FULL,
+                      ...{ month: "long", day: "numeric" },
+                    })}
                   </Text>
                 </VStack>
               </Flex>
-              <Flex pt={4} direction="row">
-                <Box pr={2}>
-                  <FontAwesome name="map-marker" size={18} />
-                </Box>
-                <VStack>
-                  <Text bold fontSize="md" lineHeight="sm">
-                    42 Wallaby Way, Sydney, Australia
-                  </Text>
-                </VStack>
-              </Flex>
+              {event.location ? (
+                <Flex pt={4} direction="row">
+                  <Box pr={2}>
+                    <FontAwesome name="map-marker" size={18} />
+                  </Box>
+                  <VStack>
+                    <Text bold fontSize="md" lineHeight="sm">
+                      {event.location}
+                    </Text>
+                  </VStack>
+                </Flex>
+              ) : null}
             </VStack>
             <Box>
               <Heading pb={2}>Description</Heading>
-              <Text>{_event.description}</Text>
+              <Text>{event.description}</Text>
             </Box>
             <Box>
-              <Heading pb={2}>Attendees (0)</Heading>
-              <Text>No one going :(</Text>
+              <Heading pb={2}>Attendees ({event.responses.yes})</Heading>
+              {Boolean(users) ? (
+                <VStack>
+                  {users.map((eventResponse, i) => {
+                    return (
+                      <HStack key={eventResponse.user.id} alignItems="center">
+                        <Avatar
+                          alignSelf="center"
+                          bg="orange.500"
+                          mr={2}
+                          size="sm"
+                          source={{
+                            uri: createGravatarRequestUrl(
+                              eventResponse.user.gravatar
+                            ),
+                          }}
+                        >
+                          BS
+                        </Avatar>
+                        <Text key={eventResponse.user.id}>
+                          {eventResponse.user.firstName}{" "}
+                          {eventResponse.user.lastName}
+                        </Text>
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              ) : (
+                <Text>No one going :(</Text>
+              )}
             </Box>
           </VStack>
         </VStack>

@@ -18,7 +18,7 @@
     "expo-secure-store": "~10.2.0",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.8.2",
-    "firebase": "^9.6.0",
+    "firebase": "^9.0.2",
     "luxon": "^2.1.1",
     "native-base": "^3.2.1-rc.1",
     "react": "16.13.1",

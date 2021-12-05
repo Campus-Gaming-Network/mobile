@@ -19,11 +19,10 @@ import useFetchEventUsers from "../hooks/useFetchEventUsers";
 import { DateTime } from "luxon";
 import { createGravatarRequestUrl } from "@campus-gaming-network/tools";
 
-export default function Event() {
-  const [event, isLoading, error] = useFetchEventDetails(
-    "9uYkG5hC1qFlvJHoRyzM"
-  );
-  const [users] = useFetchEventUsers("9uYkG5hC1qFlvJHoRyzM");
+export default function Event({ route, navigation }) {
+  const id = route.params.eventId;
+  const [event, isLoading, error] = useFetchEventDetails(id);
+  const [users] = useFetchEventUsers(id);
 
   if (isLoading) {
     return (

@@ -10,9 +10,10 @@ import {
   Badge,
 } from "native-base";
 
-const DATA = Array.from({ length: 500 }).map((x, i) => {
+const DATA = Array.from({ length: 1 }).map((x, i) => {
   return {
-    id: i,
+    // id: i,
+    id: "02GFafzSCwM0orIEB4sk",
     title:
       Math.floor(Math.random() * 10) % 2 === 0
         ? "Short Title"
@@ -26,8 +27,10 @@ const DATA = Array.from({ length: 500 }).map((x, i) => {
 });
 
 export default function Landing({ navigation }) {
-  const handleOnPress = () => {
-    navigation.navigate("Event");
+  const handleOnPress = (id) => {
+    navigation.navigate("Event", {
+      eventId: id,
+    });
   };
 
   return (
@@ -37,7 +40,7 @@ export default function Landing({ navigation }) {
           data={DATA}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
-            <Pressable onPress={handleOnPress} bg="white" px={6}>
+            <Pressable onPress={() => handleOnPress(item.id)} bg="white" px={6}>
               <VStack>
                 {item.hasStarted ? (
                   <Text

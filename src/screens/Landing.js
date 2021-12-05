@@ -9,6 +9,7 @@ import {
   Flex,
   Badge,
 } from "native-base";
+import useFetchUserEvents from "../hooks/useFetchUserEvents";
 
 const DATA = Array.from({ length: 1 }).map((x, i) => {
   return {
@@ -27,17 +28,49 @@ const DATA = Array.from({ length: 1 }).map((x, i) => {
 });
 
 export default function Landing({ navigation }) {
+  const [events, isLoading, error] = useFetchUserEvents();
+
   const handleOnPress = (id) => {
     navigation.navigate("Event", {
       eventId: id,
     });
   };
 
+  if (isLoading) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>Loading...</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>Error</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
+  if (!events) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>No data</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView>
       <Box bg="white" pt={4}>
         <FlatList
-          data={DATA}
+          data={events}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <Pressable onPress={() => handleOnPress(item.id)} bg="white" px={6}>

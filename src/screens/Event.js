@@ -57,7 +57,7 @@ export default function Event({ route, navigation }) {
   return (
     <SafeAreaView>
       <Box>
-        <Image source={background} w="100%" h={125} />
+        <Image alt="event-picture" source={background} w="100%" h={125} />
         <VStack p={4}>
           {event.hasStarted ? (
             <Flex bg="green.100" mr="auto" px={4} rounded="lg">

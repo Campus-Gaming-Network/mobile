@@ -1,32 +1,50 @@
 // Libraries
 import React from "react";
-// import {
-//   doc,
-//   collection,
-//   query,
-//   where,
-//   getDocs,
-//   Timestamp,
-// } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  query,
+  where,
+  getDocs,
+  limit,
+  Timestamp,
+} from "firebase/firestore";
 
 // Other
-// import { db } from "src/firebase";
+import { db } from "../firebase";
+import { auth } from "../firebase";
 
 // Utilities
-// import { mapEventResponse } from "src/utilities/eventResponse";
+import {
+  DEFAULT_PAGE_SIZE,
+  COLLECTIONS,
+  hasStarted,
+} from "@campus-gaming-network/tools";
 
 // Constants
 // import { COLLECTIONS } from "src/constants/firebase";
 // import { STATES } from "src/constants/api";
 
-const useFetchUserEvents = (id, limit) => {
-  //   const [state, setState] = React.useState(STATES.INITIAL);
+const useFetchUserEvents = (_limit = DEFAULT_PAGE_SIZE) => {
+  const [isLoading, setIsLoading] = React.useState(true);
   const [events, setEvents] = React.useState(null);
   const [error, setError] = React.useState(null);
+  const id = auth.currentUser.uid;
+
+  const mapEventResponse = (data) => {
+    return {
+      id: data.event.id,
+      title: data.event.name,
+      date: data.event.startDateTime.toDate().toDateString(),
+      school: data.school.name,
+      going: data.event.responses.yes,
+      isOnlineEvent: data.event.isOnlineEvent,
+      hasStarted: hasStarted(data.event.startDateTime, data.event.endDateTime),
+    };
+  };
 
   React.useEffect(() => {
     const fetchUserEvents = async () => {
-      //   setState(STATES.LOADING);
       setEvents(null);
       setError(null);
 
@@ -37,26 +55,29 @@ const useFetchUserEvents = (id, limit) => {
       let _events = [];
 
       try {
-        // const userEventsSnapshot = await getDocs(
-        //   query(
-        //     collection(db, COLLECTIONS.EVENT_RESPONSES),
-        //     where("user.ref", "==", doc(db, COLLECTIONS.USERS, id)),
-        //     where("response", "==", "YES"),
-        //     where("endDateTime", ">=", Timestamp.fromDate(new Date()))
-        //   )
-        // );
-        // if (!userEventsSnapshot.empty) {
-        //   userEventsSnapshot.forEach((doc) => {
-        //     const data = doc.data();
-        //     const event = { ...mapEventResponse(data) };
-        //     _events.push(event);
-        //   });
-        // }
+        const userEventsSnapshot = await getDocs(
+          query(
+            collection(db, COLLECTIONS.EVENT_RESPONSES),
+            where("user.ref", "==", doc(db, COLLECTIONS.USERS, id)),
+            where("response", "==", "YES"),
+            // where("endDateTime", ">=", Timestamp.fromDate(new Date())), //<--- cant get this work, no events are included when there are events that should be included given the default login
+            limit(_limit)
+          )
+        );
+        if (!userEventsSnapshot.empty) {
+          userEventsSnapshot.forEach((doc) => {
+            const data = doc.data();
+            const event = { ...mapEventResponse(data) };
+            _events.push(event);
+          });
+        }
         // setState(STATES.DONE);
-        // setEvents(_events);
+        setIsLoading(false);
+        setEvents(_events);
       } catch (error) {
         console.error({ error });
         setError(error);
+        setError(true);
         // setState(STATES.ERROR);
       }
     };
@@ -64,9 +85,9 @@ const useFetchUserEvents = (id, limit) => {
     if (id) {
       fetchUserEvents();
     }
-  }, [id, limit]);
+  }, [_limit]);
 
-  return [events, state, error];
+  return [events, isLoading, error];
 };
 
 export default useFetchUserEvents;

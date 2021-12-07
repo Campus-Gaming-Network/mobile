@@ -13,13 +13,17 @@ import {
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 
-const mapEvent = (event) => {
+const mapEvent = async (event) => {
   if (!Boolean(event)) {
     return undefined;
   }
 
+  //retrieve event creator data from event's creator reference
+  const _creator = await getDoc(event.creator);
+
   return {
     ...event,
+    creator: _creator.data().id,
     createdAt: event.createdAt?.toDate(),
     updatedAt: event.updatedAt?.toDate(),
     url: getEventUrl(event.id),
@@ -52,7 +56,7 @@ const useFetchEventDetails = (id) => {
         const _doc = await getDoc(doc(db, COLLECTIONS.EVENTS, id));
 
         if (_doc.exists) {
-          setEvent(mapEvent(_doc.data()));
+          setEvent(await mapEvent(_doc.data()));
         }
 
         setIsLoading(false);

@@ -60,7 +60,7 @@ const useFetchUserEvents = (_limit = DEFAULT_PAGE_SIZE) => {
             collection(db, COLLECTIONS.EVENT_RESPONSES),
             where("user.ref", "==", doc(db, COLLECTIONS.USERS, id)),
             where("response", "==", "YES"),
-            // where("endDateTime", ">=", Timestamp.fromDate(new Date())), //<--- cant get this work, no events are included when there are events that should be included given the default login
+            // where("endDateTime", "!=", Timestamp.fromDate(new Date())), //<--- cant get this work, no events are included when there are events that should be included given the default login
             limit(_limit)
           )
         );
@@ -71,14 +71,13 @@ const useFetchUserEvents = (_limit = DEFAULT_PAGE_SIZE) => {
             _events.push(event);
           });
         }
-        // setState(STATES.DONE);
+
         setIsLoading(false);
         setEvents(_events);
       } catch (error) {
         console.error({ error });
         setError(error);
         setError(true);
-        // setState(STATES.ERROR);
       }
     };
 

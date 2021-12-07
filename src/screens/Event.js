@@ -11,6 +11,7 @@ import {
   Badge,
   Avatar,
   HStack,
+  Button,
 } from "native-base";
 import { FontAwesome } from "@expo/vector-icons";
 import background from "../../assets/background.png";
@@ -22,7 +23,7 @@ import { createGravatarRequestUrl } from "@campus-gaming-network/tools";
 export default function Event({ route, navigation }) {
   const id = route.params.eventId;
   const [event, isLoading, error] = useFetchEventDetails(id);
-  const [users] = useFetchEventUsers(id);
+  // const [users] = useFetchEventUsers(id);s
 
   if (isLoading) {
     return (
@@ -57,7 +58,8 @@ export default function Event({ route, navigation }) {
   return (
     <SafeAreaView>
       <Box>
-        <Image alt="event-picture" source={background} w="100%" h={125} />
+        <Image source={background} w="100%" h={125} />
+
         <VStack p={4}>
           {event.hasStarted ? (
             <Flex bg="green.100" mr="auto" px={4} rounded="lg">
@@ -138,38 +140,26 @@ export default function Event({ route, navigation }) {
               <Heading pb={2}>Description</Heading>
               <Text>{event.description}</Text>
             </Box>
-            <Box>
-              <Heading pb={2}>Attendees ({event.responses.yes})</Heading>
-              {Boolean(users) ? (
-                <VStack>
-                  {users.map((eventResponse, i) => {
-                    return (
-                      <HStack key={eventResponse.user.id} alignItems="center">
-                        <Avatar
-                          alignSelf="center"
-                          bg="orange.500"
-                          mr={2}
-                          size="sm"
-                          source={{
-                            uri: createGravatarRequestUrl(
-                              eventResponse.user.gravatar
-                            ),
-                          }}
-                        >
-                          BS
-                        </Avatar>
-                        <Text key={eventResponse.user.id}>
-                          {eventResponse.user.firstName}{" "}
-                          {eventResponse.user.lastName}
-                        </Text>
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              ) : (
-                <Text>No one going :(</Text>
-              )}
-            </Box>
+            {Boolean(event.responses.yes) ? (
+              <Box>
+                <Button
+                  onPress={() =>
+                    navigation.navigate("EventAttendees", {
+                      creatorId: event.creator,
+                      eventId: id,
+                    })
+                  }
+                  mt="1"
+                  colorScheme="orange"
+                >
+                  <Text style={{ color: "white", fontWeight: "bold" }}>
+                    View Attendees ({event.responses.yes})
+                  </Text>
+                </Button>
+              </Box>
+            ) : (
+              <Text>No one going :(</Text>
+            )}
           </VStack>
         </VStack>
       </Box>

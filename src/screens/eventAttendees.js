@@ -1,0 +1,99 @@
+import React from "react";
+import { SafeAreaView, FlatList } from "react-native";
+import {
+  Heading,
+  Divider,
+  VStack,
+  Text,
+  Box,
+  Flex,
+  Badge,
+  Avatar,
+  HStack,
+  Button,
+} from "native-base";
+import useFetchEventUsers from "../hooks/useFetchEventUsers";
+import { createGravatarRequestUrl } from "@campus-gaming-network/tools";
+
+export default function EventAttendees({ route, navigation }) {
+  const id = route.params.eventId;
+  const creatorId = route.params.creatorId;
+  const [users, isLoading, error] = useFetchEventUsers(id);
+
+  if (isLoading) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>Loading...</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>Error</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
+  if (!users) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>No data</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView>
+      <Box>
+        <FlatList
+          data={users}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => (
+            <HStack
+              justifyContent="space-between"
+              key={item.user.id}
+              alignItems="center"
+              padding="2"
+            >
+              <HStack>
+                <Avatar
+                  alignSelf="center"
+                  bg="orange.500"
+                  mr={2}
+                  size="sm"
+                  source={{
+                    uri: createGravatarRequestUrl(item.user.gravatar),
+                  }}
+                >
+                  BS
+                </Avatar>
+                <VStack>
+                  <Text>
+                    {item.user.firstName} {item.user.lastName}
+                  </Text>
+                  <Text mb="1" noOfLines={1} fontWeight="thin" fontSize="2xs">
+                    {item.school}
+                  </Text>
+                </VStack>
+              </HStack>
+
+              {item.user.id === creatorId && (
+                <Badge mr="2" variant="subtle" colorScheme="orange">
+                  EVENT CREATOR
+                </Badge>
+              )}
+            </HStack>
+          )}
+        />
+      </Box>
+    </SafeAreaView>
+  );
+}

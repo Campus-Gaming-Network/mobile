@@ -11,22 +11,6 @@ import {
 } from "native-base";
 import useFetchUserEvents from "../hooks/useFetchUserEvents";
 
-const DATA = Array.from({ length: 1 }).map((x, i) => {
-  return {
-    // id: i,
-    id: "02GFafzSCwM0orIEB4sk",
-    title:
-      Math.floor(Math.random() * 10) % 2 === 0
-        ? "Short Title"
-        : "Long Title Long Title Long Title Long Title Long Title Long Title",
-    date: new Date().toLocaleString(),
-    school: "University of Chicago",
-    going: Math.floor(Math.random() * 101),
-    isOnlineEvent: Math.floor(Math.random() * 10) % 3 === 0,
-    hasStarted: Math.floor(Math.random() * 10) % 6 === 0,
-  };
-});
-
 export default function Landing({ navigation }) {
   const [events, isLoading, error] = useFetchUserEvents();
 

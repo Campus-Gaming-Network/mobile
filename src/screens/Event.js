@@ -9,21 +9,16 @@ import {
   Box,
   Flex,
   Badge,
-  Avatar,
-  HStack,
   Button,
 } from "native-base";
 import { FontAwesome } from "@expo/vector-icons";
 import background from "../../assets/background.png";
 import useFetchEventDetails from "../hooks/useFetchEventDetails";
-import useFetchEventUsers from "../hooks/useFetchEventUsers";
 import { DateTime } from "luxon";
-import { createGravatarRequestUrl } from "@campus-gaming-network/tools";
 
 export default function Event({ route, navigation }) {
   const id = route.params.eventId;
   const [event, isLoading, error] = useFetchEventDetails(id);
-  // const [users] = useFetchEventUsers(id);s
 
   if (isLoading) {
     return (

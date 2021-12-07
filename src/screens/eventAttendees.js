@@ -1,21 +1,10 @@
 import React from "react";
 import { SafeAreaView, FlatList } from "react-native";
-import {
-  Heading,
-  Divider,
-  VStack,
-  Text,
-  Box,
-  Flex,
-  Badge,
-  Avatar,
-  HStack,
-  Button,
-} from "native-base";
+import { VStack, Text, Box, Badge, Avatar, HStack } from "native-base";
 import useFetchEventUsers from "../hooks/useFetchEventUsers";
 import { createGravatarRequestUrl } from "@campus-gaming-network/tools";
 
-export default function EventAttendees({ route, navigation }) {
+export default function EventAttendees({ route }) {
   const id = route.params.eventId;
   const creatorId = route.params.creatorId;
   const [users, isLoading, error] = useFetchEventUsers(id);

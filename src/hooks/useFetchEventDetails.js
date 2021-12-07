@@ -18,12 +18,9 @@ const mapEvent = async (event) => {
     return undefined;
   }
 
-  //retrieve event creator data from event's creator reference
-  const _creator = await getDoc(event.creator);
-
   return {
     ...event,
-    creator: _creator.data().id,
+    creator: event.creator.id,
     createdAt: event.createdAt?.toDate(),
     updatedAt: event.updatedAt?.toDate(),
     url: getEventUrl(event.id),

@@ -11,8 +11,7 @@ import {
 } from "firebase/firestore";
 
 // Other
-import { db } from "../firebase";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 
 // Utilities
 import {
@@ -60,7 +59,7 @@ const useFetchUserEvents = (_limit = DEFAULT_PAGE_SIZE) => {
             collection(db, COLLECTIONS.EVENT_RESPONSES),
             where("user.ref", "==", doc(db, COLLECTIONS.USERS, id)),
             where("response", "==", "YES"),
-            // where("endDateTime", "!=", Timestamp.fromDate(new Date())), //<--- cant get this work, no events are included when there are events that should be included given the default login
+            where("event.endDateTime", ">=", Timestamp.fromDate(new Date())),
             limit(_limit)
           )
         );

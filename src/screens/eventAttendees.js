@@ -79,7 +79,14 @@ export default function EventAttendees({ route, navigation }) {
                   <Text>
                     {item.user.firstName} {item.user.lastName}
                   </Text>
-                  <Text mb="1" noOfLines={1} fontWeight="thin" fontSize="2xs">
+                  <Text
+                    letterSpacing="sm"
+                    mb="1"
+                    noOfLines={1}
+                    fontWeight="thin"
+                    fontSize="2xs"
+                    maxWidth="xs"
+                  >
                     {item.school}
                   </Text>
                 </VStack>

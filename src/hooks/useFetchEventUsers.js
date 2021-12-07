@@ -39,19 +39,9 @@ const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
         if (!snapshot.empty) {
           let eventUsers = [];
 
-          await Promise.all(
-            snapshot.docs.map(async (document) => {
-              const id = document.data().user.id;
-              const docRef = doc(db, COLLECTIONS.USERS, id);
-              const docSnap = await getDoc(docRef);
-              const school = docSnap.data().school.name;
-              eventUsers.push({ ...document.data(), school });
-            })
-          );
-
-          // snapshot.forEach((document) => {
-          //   eventUsers.push(document.data());
-          // });
+          snapshot.forEach((document) => {
+            eventUsers.push(document.data());
+          });
 
           setUsers(eventUsers);
           setIsLoading(false);

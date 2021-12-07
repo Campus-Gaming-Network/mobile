@@ -24,11 +24,10 @@ import {
 // import { COLLECTIONS } from "src/constants/firebase";
 // import { STATES } from "src/constants/api";
 
-const useFetchUserEvents = (_limit = DEFAULT_PAGE_SIZE) => {
+const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [events, setEvents] = React.useState(null);
   const [error, setError] = React.useState(null);
-  const id = auth.currentUser.uid;
 
   const mapEventResponse = (data) => {
     return {

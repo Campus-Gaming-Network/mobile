@@ -76,14 +76,19 @@ export default function EventAttendees({ route }) {
                     fontSize="2xs"
                     maxWidth="xs"
                   >
-                    {item.school}
+                    {item.user?.school?.name}
                   </Text>
                 </VStack>
               </HStack>
 
               {item.user.id === creatorId && (
-                <Badge mr="2" variant="subtle" colorScheme="orange">
-                  EVENT CREATOR
+                <Badge
+                  mr="2"
+                  textTransform="uppercase"
+                  variant="subtle"
+                  colorScheme="orange"
+                >
+                  Event Creator
                 </Badge>
               )}
             </HStack>

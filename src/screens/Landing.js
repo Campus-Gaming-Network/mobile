@@ -10,14 +10,14 @@ import {
   Badge,
 } from "native-base";
 import useFetchUserEvents from "../hooks/useFetchUserEvents";
+import { auth } from "../firebase";
 
 export default function Landing({ navigation }) {
-  const [events, isLoading, error] = useFetchUserEvents();
+  const id = auth.currentUser.uid;
+  const [events, isLoading, error] = useFetchUserEvents(id);
 
-  const handleOnPress = (id) => {
-    navigation.navigate("Event", {
-      eventId: id,
-    });
+  const handleOnPress = (eventId) => {
+    navigation.navigate("Event", { eventId });
   };
 
   if (isLoading) {

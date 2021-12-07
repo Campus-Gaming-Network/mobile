@@ -13,7 +13,7 @@ import {
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 
-const mapEvent = async (event) => {
+const mapEvent = (event) => {
   if (!Boolean(event)) {
     return undefined;
   }

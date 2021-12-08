@@ -19,7 +19,7 @@ import { useAuth } from "../providers/auth";
 
 // Screens
 import Welcome from "../screens/Welcome";
-import LogIn from "../screens/LogIn";
+import LogIn from "../screens/Login";
 import Landing from "../screens/Landing";
 import ForgotPassword from "../screens/ForgotPassword";
 import ResetPassword from "../screens/ResetPassword";
@@ -32,7 +32,6 @@ const Screens = () => {
   const toast = useToast();
   const { isAuthenticating, isAuthenticated } = useAuth();
   const handleSignOut = async () => {
-    console.log("handleSignOut");
     try {
       await signOut(auth);
     } catch (error) {

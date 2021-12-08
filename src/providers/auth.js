@@ -6,7 +6,7 @@ import { getDoc, doc } from "firebase/firestore";
 import { db, auth } from "../firebase";
 
 // Utilities
-import { saveStorageItem } from "../utilities/storage";
+import { saveStorageItem, deleteStorageItem } from "../utilities/storage";
 
 // Constants
 import { STORAGE_KEYS } from "../constants/storage";
@@ -14,7 +14,7 @@ import {
   AUTH_STATUS,
   BASE_AUTH_CONTEXT,
   AUTH_REFRESH_INTERVAL,
-} from "src/constants/auth";
+} from "../constants/auth";
 
 ////////////////////////////////////////////////////////////////////////////////
 // AuthContext
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const setAuth = async (token) => {
-    await saveStorageItem(STORAGE_KEYS.AUTH);
+    await saveStorageItem(STORAGE_KEYS.AUTH, token);
 
     setAuthStatus(AUTH_STATUS.AUTHENTICATED);
   };

@@ -6,6 +6,7 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
   limit,
 } from "firebase/firestore";
 import {
@@ -38,8 +39,8 @@ const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
         if (!snapshot.empty) {
           let eventUsers = [];
 
-          snapshot.forEach((doc) => {
-            eventUsers.push(doc.data());
+          snapshot.forEach((document) => {
+            eventUsers.push(document.data());
           });
 
           setUsers(eventUsers);

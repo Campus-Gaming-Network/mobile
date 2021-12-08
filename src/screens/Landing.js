@@ -9,35 +9,55 @@ import {
   Flex,
   Badge,
 } from "native-base";
-
-const DATA = Array.from({ length: 500 }).map((x, i) => {
-  return {
-    id: i,
-    title:
-      Math.floor(Math.random() * 10) % 2 === 0
-        ? "Short Title"
-        : "Long Title Long Title Long Title Long Title Long Title Long Title",
-    date: new Date().toLocaleString(),
-    school: "University of Chicago",
-    going: Math.floor(Math.random() * 101),
-    isOnlineEvent: Math.floor(Math.random() * 10) % 3 === 0,
-    hasStarted: Math.floor(Math.random() * 10) % 6 === 0,
-  };
-});
+import useFetchUserEvents from "../hooks/useFetchUserEvents";
+import { auth } from "../firebase";
 
 export default function Landing({ navigation }) {
-  const handleOnPress = () => {
-    navigation.navigate("Event");
+  const id = auth.currentUser.uid;
+  const [events, isLoading, error] = useFetchUserEvents(id);
+
+  const handleOnPress = (eventId) => {
+    navigation.navigate("Event", { eventId });
   };
+
+  if (isLoading) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>Loading...</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>Error</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
+
+  if (!events) {
+    return (
+      <SafeAreaView>
+        <Box>
+          <Text>No data</Text>
+        </Box>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView>
       <Box bg="white" pt={4}>
         <FlatList
-          data={DATA}
+          data={events}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
-            <Pressable onPress={handleOnPress} bg="white" px={6}>
+            <Pressable onPress={() => handleOnPress(item.id)} bg="white" px={6}>
               <VStack>
                 {item.hasStarted ? (
                   <Text

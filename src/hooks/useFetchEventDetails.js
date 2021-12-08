@@ -20,6 +20,7 @@ const mapEvent = (event) => {
 
   return {
     ...event,
+    creator: event.creator.id,
     createdAt: event.createdAt?.toDate(),
     updatedAt: event.updatedAt?.toDate(),
     url: getEventUrl(event.id),

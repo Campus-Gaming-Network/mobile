@@ -53,7 +53,7 @@ const useFetchEventDetails = (id) => {
         const _doc = await getDoc(doc(db, COLLECTIONS.EVENTS, id));
 
         if (_doc.exists) {
-          setEvent(await mapEvent(_doc.data()));
+          setEvent(mapEvent(_doc.data()));
         }
 
         setIsLoading(false);

@@ -18,7 +18,7 @@ Sentry.init({
 
 import Welcome from "./src/screens/Welcome";
 // import SignUp from "./src/screens/SignUp";
-import LogIn from "./src/screens/Login";
+import LogIn from "./src/screens/LogIn";
 import Landing from "./src/screens/Landing";
 import ForgotPassword from "./src/screens/ForgotPassword";
 import ResetPassword from "./src/screens/ResetPassword";

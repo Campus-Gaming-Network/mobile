@@ -20,10 +20,6 @@ import {
   hasStarted,
 } from "@campus-gaming-network/tools";
 
-// Constants
-// import { COLLECTIONS } from "src/constants/firebase";
-// import { STATES } from "src/constants/api";
-
 const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [events, setEvents] = React.useState(null);
@@ -45,10 +41,6 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
     const fetchUserEvents = async () => {
       setEvents(null);
       setError(null);
-
-      //   if (process.env.NODE_ENV !== "production") {
-      //     console.log(`[API] fetchUserEvents...${id}`);
-      //   }
 
       let _events = [];
 
@@ -74,7 +66,6 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
         setEvents(_events);
       } catch (error) {
         console.error({ error });
-        setError(error);
         setError(true);
       }
     };

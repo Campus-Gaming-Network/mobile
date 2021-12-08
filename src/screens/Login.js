@@ -1,22 +1,17 @@
 import React from "react";
 import {
   Box,
-  Text,
   Heading,
   VStack,
   FormControl,
   Input,
-  Link,
   Button,
-  HStack,
   useToast,
 } from "native-base";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { saveStorageItem } from "../utilities/storage";
-import { STORAGE_KEYS } from "../constants/storage";
 
-export default function LogIn({ navigation }) {
+export default function LogIn() {
   const toast = useToast();
   const [email, setEmail] = React.useState("sansonebrandon@gmail.com");
   const [password, setPassword] = React.useState("lol123!");
@@ -43,20 +38,6 @@ export default function LogIn({ navigation }) {
       status: "success",
       description: "Welcome back.",
     });
-
-    navigation.navigate("Landing");
-    setIsSubmitting(false);
-
-    // await saveStorageItem(
-    //   STORAGE_KEYS.AUTH,
-    //   JSON.stringify({
-    //     uid: auth.currentUser.uid,
-    //     email: auth.currentUser.email,
-    //     emailVerified: auth.currentUser.emailVerified,
-    //     createdAt: auth.currentUser.createdAt,
-    //     lastLoginAt: auth.currentUser.lastLoginAt,
-    //   })
-    // );
   };
 
   return (

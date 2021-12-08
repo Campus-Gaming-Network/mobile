@@ -66,7 +66,8 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
         setEvents(_events);
       } catch (error) {
         console.error({ error });
-        setError(true);
+        setError(error);
+        setIsLoading(false);
       }
     };
 

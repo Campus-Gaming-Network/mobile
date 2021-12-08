@@ -24,6 +24,7 @@ import Landing from "../screens/Landing";
 import ForgotPassword from "../screens/ForgotPassword";
 import ResetPassword from "../screens/ResetPassword";
 import Event from "../screens/Event";
+import EventAttendees from "../screens/eventAttendees";
 
 const Stack = createNativeStackNavigator();
 
@@ -70,6 +71,11 @@ const Screens = () => {
       },
     },
     { name: "Event", component: Event },
+    {
+      name: "EventAttendees",
+      component: EventAttendees,
+      options: { title: "Attendees" },
+    },
   ];
   const screens = React.useMemo(
     () => (!isAuthenticated ? unauthorizedScreens : authorizedScreens),

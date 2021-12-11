@@ -44,7 +44,7 @@ const Screens = () => {
     }
   };
   const unauthorizedScreens = [
-    { name: "LogIn", component: LogIn, options: { headerLeft: () => <></> } },
+    { name: "LogIn", component: LogIn, options: { headerBackVisible: false } },
     { name: "Welcome", component: Welcome },
     { name: "ForgotPassword", component: ForgotPassword },
     { name: "ResetPassword", component: ResetPassword },
@@ -67,7 +67,7 @@ const Screens = () => {
             onPress={handleSignOut}
           />
         ),
-        headerLeft: () => <></>,
+        headerBackVisible: false,
       },
     },
     { name: "Event", component: Event },

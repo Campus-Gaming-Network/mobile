@@ -24,6 +24,13 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [events, setEvents] = React.useState(null);
   const [error, setError] = React.useState(null);
+  const [refreshCount, setRefreshCount] = React.useState(0);
+
+  const refresh = () =>
+    setRefreshCount((c) => {
+      setIsLoading(true);
+      return c + 1;
+    });
 
   const mapEventResponse = (data) => {
     return {
@@ -74,9 +81,9 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
     if (id) {
       fetchUserEvents();
     }
-  }, [_limit]);
+  }, [_limit, refreshCount]);
 
-  return [events, isLoading, error];
+  return [events, isLoading, error, refresh];
 };
 
 export default useFetchUserEvents;

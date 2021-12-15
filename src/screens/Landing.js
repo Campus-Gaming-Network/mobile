@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, FlatList } from "react-native";
+import { SafeAreaView, FlatList, RefreshControl } from "react-native";
 import {
   Divider,
   VStack,
@@ -10,11 +10,88 @@ import {
   Badge,
 } from "native-base";
 import useFetchUserEvents from "../hooks/useFetchUserEvents";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+
+import {
+  doc,
+  collection,
+  query,
+  where,
+  getDocs,
+  limit,
+  Timestamp,
+} from "firebase/firestore";
+
+// Utilities
+import {
+  DEFAULT_PAGE_SIZE,
+  COLLECTIONS,
+  hasStarted,
+} from "@campus-gaming-network/tools";
 
 export default function Landing({ navigation }) {
   const id = auth.currentUser.uid;
-  const [events, isLoading, error] = useFetchUserEvents(id);
+  // const [events, isLoading, error] = useFetchUserEvents(id);
+
+  const [events, setEvents] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await fetchUserEvents();
+    setRefreshing(false);
+  }, []);
+
+  const fetchUserEvents = async () => {
+    const mapEventResponse = (data) => {
+      return {
+        id: data.event.id,
+        title: data.event.name,
+        date: data.event.startDateTime.toDate().toDateString(),
+        school: data.school.name,
+        going: data.event.responses.yes,
+        isOnlineEvent: data.event.isOnlineEvent,
+        hasStarted: hasStarted(
+          data.event.startDateTime,
+          data.event.endDateTime
+        ),
+      };
+    };
+
+    let _events = [];
+
+    try {
+      const userEventsSnapshot = await getDocs(
+        query(
+          collection(db, COLLECTIONS.EVENT_RESPONSES),
+          where("user.ref", "==", doc(db, COLLECTIONS.USERS, id)),
+          where("response", "==", "YES"),
+          where("event.endDateTime", ">=", Timestamp.fromDate(new Date())),
+          limit(DEFAULT_PAGE_SIZE)
+        )
+      );
+      if (!userEventsSnapshot.empty) {
+        userEventsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          const event = { ...mapEventResponse(data) };
+          _events.push(event);
+        });
+      }
+
+      setIsLoading(false);
+      setEvents(_events);
+    } catch (error) {
+      console.error({ error });
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchUserEvents();
+  }, []);
 
   const handleOnPress = (eventId) => {
     navigation.navigate("Event", { eventId });
@@ -55,6 +132,9 @@ export default function Landing({ navigation }) {
       <Box bg="white" pt={4}>
         <FlatList
           data={events}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <Pressable onPress={() => handleOnPress(item.id)} bg="white" px={6}>

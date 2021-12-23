@@ -139,7 +139,7 @@ export default function Event({ route, navigation }) {
                 <Box>
                   <Button
                     onPress={() =>
-                      navigation.navigate("EventAttendees", {
+                      navigation.navigate("Attendees", {
                         creatorId: event.creator,
                         eventId: id,
                       })

@@ -24,7 +24,7 @@ import Landing from "../screens/Landing";
 import ForgotPassword from "../screens/ForgotPassword";
 import ResetPassword from "../screens/ResetPassword";
 import Event from "../screens/Event";
-import EventAttendees from "../screens/eventAttendees";
+import Attendees from "../screens/Attendees";
 
 const Stack = createNativeStackNavigator();
 
@@ -72,8 +72,8 @@ const Screens = () => {
     },
     { name: "Event", component: Event },
     {
-      name: "EventAttendees",
-      component: EventAttendees,
+      name: "Attendees",
+      component: Attendees,
       options: { title: "Attendees" },
     },
   ];

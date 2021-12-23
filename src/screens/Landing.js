@@ -14,12 +14,12 @@ import { auth } from "../firebase";
 
 export default function Landing({ navigation }) {
   const id = auth.currentUser.uid;
-  const [events, isLoading, error, refresh] = useFetchUserEvents(id);
+  const [events, isLoading, error, refreshEvents] = useFetchUserEvents(id);
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    refresh();
+    refreshEvents();
     setRefreshing(false);
   }, []);
 

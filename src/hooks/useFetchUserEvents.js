@@ -1,24 +1,9 @@
 // Libraries
 import React from "react";
-import {
-  doc,
-  collection,
-  query,
-  where,
-  getDocs,
-  limit,
-  Timestamp,
-} from "firebase/firestore";
-
-// Other
-import { auth, db } from "../firebase";
 
 // Utilities
-import {
-  DEFAULT_PAGE_SIZE,
-  COLLECTIONS,
-  hasStarted,
-} from "@campus-gaming-network/tools";
+import { DEFAULT_PAGE_SIZE, hasStarted } from "@campus-gaming-network/tools";
+import { getUserEvents } from "../utilities/api";
 
 const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -26,7 +11,7 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
   const [error, setError] = React.useState(null);
   const [refreshCount, setRefreshCount] = React.useState(0);
 
-  const refresh = () =>
+  const refreshEvents = () =>
     setRefreshCount((c) => {
       setIsLoading(true);
       return c + 1;
@@ -52,15 +37,8 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
       let _events = [];
 
       try {
-        const userEventsSnapshot = await getDocs(
-          query(
-            collection(db, COLLECTIONS.EVENT_RESPONSES),
-            where("user.ref", "==", doc(db, COLLECTIONS.USERS, id)),
-            where("response", "==", "YES"),
-            where("event.endDateTime", ">=", Timestamp.fromDate(new Date())),
-            limit(_limit)
-          )
-        );
+        const userEventsSnapshot = await getUserEvents(id, _limit);
+
         if (!userEventsSnapshot.empty) {
           userEventsSnapshot.forEach((doc) => {
             const data = doc.data();
@@ -68,7 +46,6 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
             _events.push(event);
           });
         }
-
         setIsLoading(false);
         setEvents(_events);
       } catch (error) {
@@ -83,7 +60,7 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
     }
   }, [_limit, refreshCount]);
 
-  return [events, isLoading, error, refresh];
+  return [events, isLoading, error, refreshEvents];
 };
 
 export default useFetchUserEvents;

@@ -16,7 +16,7 @@ import { db } from "../firebase";
 
 export const getUserEvents = async (id, _limit) => {
   try {
-    return await getDocs(
+    const response = await getDocs(
       query(
         collection(db, COLLECTIONS.EVENT_RESPONSES),
         where("user.ref", "==", doc(db, COLLECTIONS.USERS, id)),
@@ -25,22 +25,25 @@ export const getUserEvents = async (id, _limit) => {
         limit(_limit)
       )
     );
+    return [response, null];
   } catch (error) {
-    return error;
+    return [null, error];
   }
 };
 
 export const getEvent = async (id) => {
   try {
-    return await getDoc(doc(db, COLLECTIONS.EVENTS, id));
+    const response = await getDoc(doc(db, COLLECTIONS.EVENTS, id));
+
+    return [response, null];
   } catch (error) {
-    return error;
+    return [null, error];
   }
 };
 
 export const getEventUsers = async (id, _limit) => {
   try {
-    return await getDocs(
+    const response = await getDocs(
       query(
         collection(db, COLLECTIONS.EVENT_RESPONSES),
         where("event.ref", "==", doc(db, COLLECTIONS.EVENTS, id)),
@@ -48,7 +51,9 @@ export const getEventUsers = async (id, _limit) => {
         limit(_limit)
       )
     );
+
+    return [response, null];
   } catch (error) {
-    return error;
+    return [null, error];
   }
 };

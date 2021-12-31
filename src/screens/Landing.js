@@ -58,8 +58,8 @@ export default function Landing({ navigation }) {
   }
 
   return (
-    <SafeAreaView>
-      <Box bg="white" pt={4}>
+    <SafeAreaView flex={1}>
+      <Box bg="white" pt={4} flex={1}>
         <FlatList
           data={events}
           refreshControl={

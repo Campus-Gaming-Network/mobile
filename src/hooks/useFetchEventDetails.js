@@ -10,8 +10,7 @@ import {
   isValidUrl,
   getSchoolUrl,
 } from "@campus-gaming-network/tools";
-import { getDoc, doc } from "firebase/firestore";
-import { db } from "../firebase";
+import { getEvent } from "../utilities/api";
 
 const mapEvent = (event) => {
   if (!Boolean(event)) {
@@ -49,17 +48,14 @@ const useFetchEventDetails = (id) => {
       setEvent(null);
       setError(null);
 
-      try {
-        const _doc = await getDoc(doc(db, COLLECTIONS.EVENTS, id));
+      const [eventSnapshot, error] = await getEvent(id);
 
-        if (_doc.exists) {
-          setEvent(mapEvent(_doc.data()));
-        }
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error({ error });
+      if (error) {
+        console.log({ error });
         setError(error);
+        setIsLoading(false);
+      } else {
+        setEvent(mapEvent(eventSnapshot.data()));
         setIsLoading(false);
       }
     };

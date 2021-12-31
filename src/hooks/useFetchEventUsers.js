@@ -1,9 +1,6 @@
 // Libraries
 import React from "react";
-import {
-  DEFAULT_USERS_LIST_PAGE_SIZE,
-  COLLECTIONS,
-} from "@campus-gaming-network/tools";
+import { DEFAULT_USERS_LIST_PAGE_SIZE } from "@campus-gaming-network/tools";
 import { getEventUsers } from "../utilities/api";
 
 const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
@@ -13,9 +10,9 @@ const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
   const [refreshCount, setRefreshCount] = React.useState(0);
 
   const refreshAttendees = () =>
-    setRefreshCount((c) => {
+    setRefreshCount((refreshCount) => {
       setIsLoading(true);
-      return c + 1;
+      return refreshCount + 1;
     });
 
   React.useEffect(() => {
@@ -24,22 +21,19 @@ const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
       setUsers(null);
       setError(null);
 
-      try {
-        const snapshot = await getEventUsers(id, _limit);
+      const [eventUsersSnapshot, error] = await getEventUsers(id, _limit);
 
-        if (!snapshot.empty) {
-          let eventUsers = [];
-
-          snapshot.forEach((document) => {
-            eventUsers.push(document.data());
-          });
-
-          setUsers(eventUsers);
-          setIsLoading(false);
-        }
-      } catch (error) {
+      if (error) {
         console.error({ error });
         setError(error);
+        setIsLoading(false);
+      } else {
+        let eventUsers = [];
+        eventUsersSnapshot.forEach((doc) => {
+          eventUsers.push(doc.data());
+        });
+
+        setUsers(eventUsers);
         setIsLoading(false);
       }
     };

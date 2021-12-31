@@ -12,9 +12,9 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
   const [refreshCount, setRefreshCount] = React.useState(0);
 
   const refreshEvents = () =>
-    setRefreshCount((c) => {
+    setRefreshCount((refreshCount) => {
       setIsLoading(true);
-      return c + 1;
+      return refreshCount + 1;
     });
 
   const mapEventResponse = (data) => {
@@ -36,22 +36,20 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
 
       let _events = [];
 
-      try {
-        const userEventsSnapshot = await getUserEvents(id, _limit);
+      const [userEventsSnapshot, error] = await getUserEvents(id, _limit);
 
-        if (!userEventsSnapshot.empty) {
-          userEventsSnapshot.forEach((doc) => {
-            const data = doc.data();
-            const event = { ...mapEventResponse(data) };
-            _events.push(event);
-          });
-        }
-        setIsLoading(false);
-        setEvents(_events);
-      } catch (error) {
+      if (error) {
         console.error({ error });
         setError(error);
         setIsLoading(false);
+      } else {
+        userEventsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          const event = { ...mapEventResponse(data) };
+          _events.push(event);
+        });
+        setIsLoading(false);
+        setEvents(_events);
       }
     };
 

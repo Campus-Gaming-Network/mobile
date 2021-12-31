@@ -47,8 +47,8 @@ export default function Attendees({ route }) {
   }
 
   return (
-    <SafeAreaView>
-      <Box>
+    <SafeAreaView flex={1}>
+      <Box flex={1}>
         <FlatList
           data={users}
           refreshControl={

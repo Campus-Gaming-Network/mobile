@@ -1,13 +1,14 @@
 import React from "react";
 import { SafeAreaView, FlatList, RefreshControl } from "react-native";
 import { VStack, Text, Box, Badge, Avatar, HStack } from "native-base";
-import useFetchEventUsers from "../hooks/useFetchEventUsers";
+import useFetchEventAttendees from "../hooks/useFetchEventAttendees";
 import { createGravatarRequestUrl } from "@campus-gaming-network/tools";
 
 export default function Attendees({ route }) {
   const id = route.params.eventId;
   const creatorId = route.params.creatorId;
-  const [users, isLoading, error, refreshAttendees] = useFetchEventUsers(id);
+  const [users, isLoading, error, refreshAttendees] =
+    useFetchEventAttendees(id);
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(async () => {

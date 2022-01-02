@@ -41,7 +41,7 @@ export const getEvent = async (id) => {
   }
 };
 
-export const getEventUsers = async (id, _limit) => {
+export const getEventAttendees = async (id, _limit) => {
   try {
     const response = await getDocs(
       query(

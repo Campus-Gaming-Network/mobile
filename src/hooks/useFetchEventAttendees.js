@@ -1,19 +1,18 @@
 // Libraries
 import React from "react";
 import { DEFAULT_USERS_LIST_PAGE_SIZE } from "@campus-gaming-network/tools";
-import { getEventUsers } from "../utilities/api";
+import { getEventAttendees } from "../utilities/api";
 
-const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
+const useFetchEventAttendees = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [users, setUsers] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [refreshCount, setRefreshCount] = React.useState(0);
 
-  const refreshAttendees = () =>
-    setRefreshCount((refreshCount) => {
-      setIsLoading(true);
-      return refreshCount + 1;
-    });
+  const refreshAttendees = () => {
+    setIsLoading(true);
+    setRefreshCount(refreshCount + 1);
+  };
 
   React.useEffect(() => {
     const fetchEventUsers = async () => {
@@ -21,7 +20,7 @@ const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
       setUsers(null);
       setError(null);
 
-      const [eventUsersSnapshot, error] = await getEventUsers(id, _limit);
+      const [eventUsersSnapshot, error] = await getEventAttendees(id, _limit);
 
       if (error) {
         console.error({ error });
@@ -46,4 +45,4 @@ const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
   return [users, isLoading, error, refreshAttendees];
 };
 
-export default useFetchEventUsers;
+export default useFetchEventAttendees;

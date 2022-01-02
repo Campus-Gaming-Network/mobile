@@ -11,11 +11,10 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
   const [error, setError] = React.useState(null);
   const [refreshCount, setRefreshCount] = React.useState(0);
 
-  const refreshEvents = () =>
-    setRefreshCount((refreshCount) => {
-      setIsLoading(true);
-      return refreshCount + 1;
-    });
+  const refreshEvents = () => {
+    setIsLoading(true);
+    setRefreshCount(refreshCount + 1);
+  };
 
   const mapEventResponse = (data) => {
     return {

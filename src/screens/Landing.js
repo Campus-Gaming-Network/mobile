@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, FlatList } from "react-native";
+import { SafeAreaView, FlatList, RefreshControl } from "react-native";
 import {
   Divider,
   VStack,
@@ -14,7 +14,14 @@ import { auth } from "../firebase";
 
 export default function Landing({ navigation }) {
   const id = auth.currentUser.uid;
-  const [events, isLoading, error] = useFetchUserEvents(id);
+  const [events, isLoading, error, refreshEvents] = useFetchUserEvents(id);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    refreshEvents();
+    setRefreshing(false);
+  }, []);
 
   const handleOnPress = (eventId) => {
     navigation.navigate("Event", { eventId });
@@ -40,7 +47,7 @@ export default function Landing({ navigation }) {
     );
   }
 
-  if (!events) {
+  if (!events || !events.length) {
     return (
       <SafeAreaView>
         <Box>
@@ -51,10 +58,13 @@ export default function Landing({ navigation }) {
   }
 
   return (
-    <SafeAreaView>
-      <Box bg="white" pt={4}>
+    <SafeAreaView flex={1}>
+      <Box bg="white" pt={4} flex={1}>
         <FlatList
           data={events}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <Pressable onPress={() => handleOnPress(item.id)} bg="white" px={6}>

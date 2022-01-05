@@ -1,29 +1,20 @@
 // Libraries
 import React from "react";
-import {
-  doc,
-  collection,
-  query,
-  where,
-  getDocs,
-  limit,
-  Timestamp,
-} from "firebase/firestore";
-
-// Other
-import { auth, db } from "../firebase";
 
 // Utilities
-import {
-  DEFAULT_PAGE_SIZE,
-  COLLECTIONS,
-  hasStarted,
-} from "@campus-gaming-network/tools";
+import { DEFAULT_PAGE_SIZE, hasStarted } from "@campus-gaming-network/tools";
+import { getUserEvents } from "../utilities/api";
 
 const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [events, setEvents] = React.useState(null);
   const [error, setError] = React.useState(null);
+  const [refreshCount, setRefreshCount] = React.useState(0);
+
+  const refreshEvents = () => {
+    setIsLoading(true);
+    setRefreshCount(refreshCount + 1);
+  };
 
   const mapEventResponse = (data) => {
     return {
@@ -44,39 +35,29 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
 
       let _events = [];
 
-      try {
-        const userEventsSnapshot = await getDocs(
-          query(
-            collection(db, COLLECTIONS.EVENT_RESPONSES),
-            where("user.ref", "==", doc(db, COLLECTIONS.USERS, id)),
-            where("response", "==", "YES"),
-            where("event.endDateTime", ">=", Timestamp.fromDate(new Date())),
-            limit(_limit)
-          )
-        );
-        if (!userEventsSnapshot.empty) {
-          userEventsSnapshot.forEach((doc) => {
-            const data = doc.data();
-            const event = { ...mapEventResponse(data) };
-            _events.push(event);
-          });
-        }
+      const [userEventsSnapshot, error] = await getUserEvents(id, _limit);
 
-        setIsLoading(false);
-        setEvents(_events);
-      } catch (error) {
+      if (error) {
         console.error({ error });
         setError(error);
-        setIsLoading(false);
+      } else if (!userEventsSnapshot.empty) {
+        userEventsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          const event = { ...mapEventResponse(data) };
+          _events.push(event);
+        });
+        setEvents(_events);
       }
+
+      setIsLoading(false);
     };
 
     if (id) {
       fetchUserEvents();
     }
-  }, [_limit]);
+  }, [_limit, refreshCount]);
 
-  return [events, isLoading, error];
+  return [events, isLoading, error, refreshEvents];
 };
 
 export default useFetchUserEvents;

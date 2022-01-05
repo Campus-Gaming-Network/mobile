@@ -1,13 +1,21 @@
 import React from "react";
-import { SafeAreaView, FlatList } from "react-native";
+import { SafeAreaView, FlatList, RefreshControl } from "react-native";
 import { VStack, Text, Box, Badge, Avatar, HStack } from "native-base";
-import useFetchEventUsers from "../hooks/useFetchEventUsers";
+import useFetchEventAttendees from "../hooks/useFetchEventAttendees";
 import { createGravatarRequestUrl } from "@campus-gaming-network/tools";
 
-export default function EventAttendees({ route }) {
+export default function Attendees({ route }) {
   const id = route.params.eventId;
   const creatorId = route.params.creatorId;
-  const [users, isLoading, error] = useFetchEventUsers(id);
+  const [users, isLoading, error, refreshAttendees] =
+    useFetchEventAttendees(id);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    refreshAttendees();
+    setRefreshing(false);
+  }, []);
 
   if (isLoading) {
     return (
@@ -40,10 +48,13 @@ export default function EventAttendees({ route }) {
   }
 
   return (
-    <SafeAreaView>
-      <Box>
+    <SafeAreaView flex={1}>
+      <Box flex={1}>
         <FlatList
           data={users}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <HStack

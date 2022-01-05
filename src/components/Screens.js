@@ -10,6 +10,7 @@ import {
 } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import { signOut } from "firebase/auth";
+// import { dynamicLinks } from '@react-native-firebase/dynamic-links';
 
 // Other
 import { auth } from "../firebase";
@@ -22,7 +23,7 @@ import Welcome from "../screens/Welcome";
 import LogIn from "../screens/Login";
 import Landing from "../screens/Landing";
 import ForgotPassword from "../screens/ForgotPassword";
-import ResetPassword from "../screens/ResetPassword";
+import AuthAction from "../screens/AuthAction";
 import Event from "../screens/Event";
 import EventAttendees from "../screens/eventAttendees";
 
@@ -47,7 +48,7 @@ const Screens = () => {
     { name: "LogIn", component: LogIn },
     { name: "Welcome", component: Welcome },
     { name: "ForgotPassword", component: ForgotPassword },
-    { name: "ResetPassword", component: ResetPassword },
+    { name: "AuthAction", component: AuthAction },
   ];
   const authorizedScreens = [
     {
@@ -80,6 +81,13 @@ const Screens = () => {
     () => (!isAuthenticated ? unauthorizedScreens : authorizedScreens),
     [isAuthenticated]
   );
+  const handleDynamicLink = (link) => {
+    console.log("handleDynamicLink", link.url);
+  };
+  // React.useEffect(() => {
+  //   const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+  //   return () => unsubscribe();
+  // }, []);
 
   if (isAuthenticating) {
     return (

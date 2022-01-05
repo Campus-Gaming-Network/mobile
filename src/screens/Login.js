@@ -11,7 +11,7 @@ import {
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
-export default function LogIn() {
+export default function LogIn({ navigation }) {
   const toast = useToast();
   const [email, setEmail] = React.useState("sansonebrandon@gmail.com");
   const [password, setPassword] = React.useState("lol123!");
@@ -81,6 +81,9 @@ export default function LogIn() {
           _text={{ color: "white", fontWeight: "bold" }}
         >
           {isSubmitting ? "Signing in..." : "Sign in"}
+        </Button>
+        <Button onPress={() => navigation.navigate("ForgotPassword")}>
+          Forgot Password?
         </Button>
       </VStack>
     </Box>

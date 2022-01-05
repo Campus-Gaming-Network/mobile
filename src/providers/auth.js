@@ -40,13 +40,13 @@ export const AuthProvider = ({ children }) => {
   );
 
   React.useEffect(() => {
-    if (process.env.ENV !== "production") {
+    if (process.env.NODE_ENV !== "production") {
       console.log(`[AUTH] Status -> ${authStatus}`);
     }
-  }, [authStatus, process.env.ENV]);
+  }, [authStatus, process.env.NODE_ENV]);
 
   const clearAuth = async () => {
-    if (process.env.ENV !== "production") {
+    if (process.env.NODE_ENV !== "production") {
       console.log("[AUTH] Clearing auth.");
     }
 
@@ -67,19 +67,19 @@ export const AuthProvider = ({ children }) => {
     setAuthStatus(AUTH_STATUS.AUTHENTICATING);
 
     return onIdTokenChanged(auth, async (authUser) => {
-      if (process.env.ENV !== "production") {
+      if (process.env.NODE_ENV !== "production") {
         console.log("[AUTH] Token changed!");
       }
 
       if (!Boolean(authUser)) {
-        if (process.env.ENV !== "production") {
+        if (process.env.NODE_ENV !== "production") {
           console.log("[AUTH] No auth user found.");
         }
         clearAuth();
         return;
       }
 
-      if (process.env.ENV !== "production") {
+      if (process.env.NODE_ENV !== "production") {
         console.log("[AUTH] Updating token.");
       }
 
@@ -126,7 +126,7 @@ export const AuthProvider = ({ children }) => {
   // Force refresh the token
   React.useEffect(() => {
     const handle = setInterval(async () => {
-      if (process.env.ENV !== "production") {
+      if (process.env.NODE_ENV !== "production") {
         console.log("[AUTH] Refreshing token.");
       }
 
@@ -140,7 +140,7 @@ export const AuthProvider = ({ children }) => {
           clearAuth();
         }
       } else {
-        if (process.env.ENV !== "production") {
+        if (process.env.NODE_ENV !== "production") {
           console.log("[AUTH] No auth user found.");
         }
         clearAuth();

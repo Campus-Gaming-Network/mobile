@@ -1,19 +1,9 @@
 // Libraries
 import React from "react";
-import {
-  doc,
-  collection,
-  query,
-  where,
-  getDocs,
-  getDoc,
-  limit,
-} from "firebase/firestore";
-import {
-  DEFAULT_USERS_LIST_PAGE_SIZE,
-  COLLECTIONS,
-} from "@campus-gaming-network/tools";
-import { db } from "../firebase";
+import { DEFAULT_USERS_LIST_PAGE_SIZE } from "@campus-gaming-network/tools";
+
+// Utilities
+import { getEventUsers } from "../utilities/api";
 
 const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -26,31 +16,16 @@ const useFetchEventUsers = (id, _limit = DEFAULT_USERS_LIST_PAGE_SIZE) => {
       setUsers(null);
       setError(null);
 
-      let queryArgs = [
-        collection(db, COLLECTIONS.EVENT_RESPONSES),
-        where("event.ref", "==", doc(db, COLLECTIONS.EVENTS, id)),
-        where("response", "==", "YES"),
-        limit(_limit),
-      ];
+      const response = await getEventUsers(id, _limit);
 
-      try {
-        const snapshot = await getDocs(query(...queryArgs));
-
-        if (!snapshot.empty) {
-          let eventUsers = [];
-
-          snapshot.forEach((document) => {
-            eventUsers.push(document.data());
-          });
-
-          setUsers(eventUsers);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error({ error });
-        setError(error);
-        setIsLoading(false);
+      if (response.users) {
+        setUsers(response.users);
+      } else if (response.error) {
+        console.error(response.error);
+        setError(response.error);
       }
+
+      setIsLoading(false);
     };
 
     if (id) {

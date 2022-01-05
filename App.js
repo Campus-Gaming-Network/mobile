@@ -11,12 +11,15 @@ import Screens from "./src/components/Screens";
 // Providers
 import { AuthProvider } from "./src/providers/auth";
 
-Sentry.init({
+const sentryConfig = {
   dsn: Constants.manifest.extra.sentryDsn,
-  environment: process.env.ENV !== "development" ? "production" : "development",
+  environment:
+    process.env.NODE_ENV === "development" ? "development" : "production",
   enableInExpoDevelopment: true,
-  debug: true,
-});
+  debug: process.env.NODE_ENV === "development",
+};
+
+Sentry.init(sentryConfig);
 
 export default function App() {
   return (

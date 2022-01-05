@@ -40,16 +40,16 @@ const useFetchUserEvents = (id, _limit = DEFAULT_PAGE_SIZE) => {
       if (error) {
         console.error({ error });
         setError(error);
-        setIsLoading(false);
-      } else {
+      } else if (!userEventsSnapshot.empty) {
         userEventsSnapshot.forEach((doc) => {
           const data = doc.data();
           const event = { ...mapEventResponse(data) };
           _events.push(event);
         });
-        setIsLoading(false);
         setEvents(_events);
       }
+
+      setIsLoading(false);
     };
 
     if (id) {

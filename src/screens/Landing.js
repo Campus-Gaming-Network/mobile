@@ -47,7 +47,7 @@ export default function Landing({ navigation }) {
     );
   }
 
-  if (!events) {
+  if (!events || !events.length) {
     return (
       <SafeAreaView>
         <Box>
